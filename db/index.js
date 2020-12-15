@@ -6,11 +6,26 @@ const client = new Client(
   `postgres://postgres:${password}@localhost:5432/juiceboxdev`
 );
 
+console.log("client password is:", password);
+
 async function getAllUsers() {
   try {
     const { rows } = await client.query(`
       SELECT id, username, name, location, active 
       FROM users;
+    `);
+
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getAllTags() {
+  try {
+    const { rows } = await client.query(`
+      SELECT * 
+      FROM tags;
     `);
 
     return rows;
@@ -332,4 +347,5 @@ module.exports = {
   addTagsToPost,
   createTags,
   getPostsByTagName,
+  getAllTags,
 };
