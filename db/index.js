@@ -6,8 +6,6 @@ const client = new Client(
   `postgres://postgres:${password}@localhost:5432/juiceboxdev`
 );
 
-console.log("client password is:", password);
-
 async function getAllUsers() {
   try {
     const { rows } = await client.query(`
@@ -335,6 +333,25 @@ async function getPostById(postId) {
   }
 }
 
+async function getUserByUsername(username) {
+  try {
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+      SELECT *
+      FROM users
+      WHERE username=$1;
+    `,
+      [username]
+    );
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   client,
   getAllUsers,
@@ -348,4 +365,5 @@ module.exports = {
   createTags,
   getPostsByTagName,
   getAllTags,
+  getUserByUsername,
 };
